@@ -1,21 +1,36 @@
----
 version: '3.7'
 services:
     nginx:
-
+      container_name: nginx
+      image: nginx:latest
+      volumes: 
+      - type: bind
+        source: ./nginx/nginx.conf
+        target: /etc/nginx/nginx.conf
+      ports:
+        - target: 80
+          published: 80
+          protocol: tcp
 
     server:
-
+      image: maven:lates
+      build: 
+        context: ./server
+        dockerfile: Dockerfile
 
     client:
+      image: node:10
+      build:
+        context: ./client 
+        dockerfile: Dockerfile
     
       environment:
       - REACT_APP_SERVICE_HOST=${REACT_APP_SERVICE_HOST}
     
 
     mongo:
-    
-
+      image: mongo:latest
+      container_name: mongo
     mongo-seed:
       image: fvilers/mongo-seed:1.0.0
       environment:
